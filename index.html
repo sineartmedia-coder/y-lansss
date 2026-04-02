@@ -284,7 +284,7 @@
         const gridSize = 40;
         let tileCount;
         let snake = [];
-        let food = { x: 5, y: 5 };
+        let foods = []; // Array for multiple hearts
         let dx = 0;
         let dy = 0;
         let nextDx = 0;
@@ -331,6 +331,33 @@
             }
         }
 
+        function spawnFood() {
+            if (!tileCount) return;
+            const newFood = {
+                x: Math.floor(Math.random() * tileCount),
+                y: Math.floor(Math.random() * tileCount)
+            };
+            
+            // Don't spawn food inside snake or existing food
+            for (let part of snake) {
+                if (part.x === newFood.x && part.y === newFood.y) return spawnFood();
+            }
+            if (foods) {
+                for (let f of foods) {
+                    if (f.x === newFood.x && f.y === newFood.y) return spawnFood();
+                }
+            }
+            
+            foods.push(newFood);
+        }
+
+        function initFoods() {
+            foods = [];
+            for (let i = 0; i < 5; i++) {
+                spawnFood();
+            }
+        }
+
         window.onload = initCanvas;
         window.onresize = initCanvas;
 
@@ -352,7 +379,7 @@
             gameOverScreen.classList.remove('active');
             gameActive = true;
             
-            spawnFood();
+            initFoods(); 
             
             if (gameLoop) clearInterval(gameLoop);
             gameLoop = setInterval(draw, 160); // Slower, was 100
@@ -394,16 +421,23 @@
             snake.unshift(head);
 
             // Eat food
-            if (head.x === food.x && head.y === food.y) {
-                score += 10;
-                scoreElement.textContent = score;
-                if (score > highScore) {
-                    highScore = score;
-                    highScoreElement.textContent = highScore;
-                    localStorage.setItem('snakeHighScore', highScore);
+            let ate = false;
+            foods.forEach((f, index) => {
+                if (head.x === f.x && head.y === f.y) {
+                    score += 10;
+                    scoreElement.textContent = score;
+                    if (score > highScore) {
+                        highScore = score;
+                        highScoreElement.textContent = highScore;
+                        localStorage.setItem('snakeHighScore', highScore);
+                    }
+                    foods.splice(index, 1);
+                    spawnFood();
+                    ate = true;
                 }
-                spawnFood();
-            } else {
+            });
+
+            if (!ate) {
                 snake.pop();
             }
 
@@ -440,15 +474,17 @@
             // Reset composite to draw UI elements normally on top (like the heart or head indicator)
             ctx.globalCompositeOperation = 'source-over';
 
-            // 4. Draw Food (Heart ❤️)
+            // 4. Draw Food (Hearts ❤️)
             ctx.font = `${gridSize - 4}px Arial`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(
-                '❤️', 
-                food.x * gridSize + gridSize / 2, 
-                food.y * gridSize + gridSize / 2
-            );
+            foods.forEach(f => {
+                ctx.fillText(
+                    '❤️', 
+                    f.x * gridSize + gridSize / 2, 
+                    f.y * gridSize + gridSize / 2
+                );
+            });
 
             // 5. Draw Snake Head indicator (Subtle glow/border so player knows where they are)
             ctx.strokeStyle = 'rgba(0, 243, 255, 0.5)';
