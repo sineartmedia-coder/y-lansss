@@ -154,21 +154,19 @@
         }
 
         .control-btn {
-            width: 45vw !important;
-            height: 45vw !important;
-            max-width: 250px;
-            max-height: 250px;
+            width: 32vw !important;
+            height: 32vw !important;
             background: rgba(10, 10, 10, 0.95) !important;
-            border: 6px solid var(--accent-color) !important;
-            border-radius: 30px !important;
+            border: 4px solid var(--accent-color) !important;
+            border-radius: 20px !important;
             color: var(--accent-color) !important;
             display: flex !important;
             justify-content: center;
             align-items: center;
-            font-size: 25vw !important;
+            font-size: 16vw !important;
             cursor: pointer;
             user-select: none;
-            box-shadow: 0 0 50px rgba(0, 243, 255, 0.6);
+            box-shadow: 0 0 35px rgba(0, 243, 255, 0.5);
             transition: all 0.1s;
             touch-action: manipulation;
         }
@@ -262,17 +260,14 @@
         </div>
     </div>
 
-    <!-- Mobile Virtual Joystick - GIGANTIC DIAMOND -->
     <div id="mobile-controls">
         <div class="d-pad-row">
             <div class="control-btn" onmousedown="handleDirection('ArrowUp')" ontouchstart="handleDirection('ArrowUp')">▲</div>
         </div>
-        <div class="d-pad-row">
+        <div class="d-pad-row" style="gap: 2vw;">
             <div class="control-btn" onmousedown="handleDirection('ArrowLeft')" ontouchstart="handleDirection('ArrowLeft')">◀</div>
-            <div class="control-btn" onmousedown="handleDirection('ArrowRight')" ontouchstart="handleDirection('ArrowRight')">▶</div>
-        </div>
-        <div class="d-pad-row">
             <div class="control-btn" onmousedown="handleDirection('ArrowDown')" ontouchstart="handleDirection('ArrowDown')">▼</div>
+            <div class="control-btn" onmousedown="handleDirection('ArrowRight')" ontouchstart="handleDirection('ArrowRight')">▶</div>
         </div>
     </div>
 
@@ -286,7 +281,7 @@
         const gameOverScreen = document.getElementById('game-over-screen');
         const gameContainer = document.getElementById('game-container');
 
-        const gridSize = 20;
+        const gridSize = 40;
         let tileCount;
         let snake = [];
         let food = { x: 5, y: 5 };
@@ -341,9 +336,10 @@
 
         function startGame() {
             // Reset state
+            const mid = Math.floor(tileCount / 2);
             snake = [
-                { x: 10, y: 10 },
-                { x: 10, y: 11 }
+                { x: mid, y: mid },
+                { x: mid, y: mid + 1 }
             ];
             dx = 0;
             dy = 0; // Don't move yet!
