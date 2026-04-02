@@ -26,9 +26,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
+            padding-top: 5px;
         }
 
         #game-container {
@@ -132,13 +133,14 @@
         /* Mobile Controls */
         #mobile-controls {
             display: none;
-            margin-top: 5px;
+            margin-top: 20px;
+            margin-bottom: 30px;
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            gap: 5px;
+            gap: 10px;
         }
 
         .d-pad-row {
@@ -148,19 +150,19 @@
         }
 
         .control-btn {
-            width: 70px;
-            height: 70px;
-            background: rgba(20, 20, 20, 0.9);
-            border: 2px solid var(--accent-color);
-            border-radius: 20px;
+            width: 110px;
+            height: 110px;
+            background: rgba(20, 20, 20, 0.98);
+            border: 4px solid var(--accent-color);
+            border-radius: 30px;
             color: var(--accent-color);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2rem;
+            font-size: 3.5rem;
             cursor: pointer;
             user-select: none;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
             transition: all 0.1s;
             touch-action: manipulation;
         }
@@ -178,6 +180,15 @@
             }
             .hud {
                 margin-top: 5px;
+                width: 98vw;
+                padding: 10px;
+            }
+            #game-container {
+                margin-top: 5px;
+                width: 98vw;
+            }
+            body {
+                overflow-y: auto; /* Allow scrolling to buttons if needed on short screens */
             }
         }
 
