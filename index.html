@@ -385,16 +385,6 @@
             gameLoop = setInterval(draw, 160); // Slower, was 100
         }
 
-        function spawnFood() {
-            food.x = Math.floor(Math.random() * tileCount);
-            food.y = Math.floor(Math.random() * tileCount);
-            
-            // Don't spawn food inside snake
-            for (let part of snake) {
-                if (part.x === food.x && part.y === food.y) return spawnFood();
-            }
-        }
-
         function draw() {
             if (!gameActive) return;
 
