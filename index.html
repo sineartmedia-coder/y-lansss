@@ -33,7 +33,7 @@
 
         #game-container {
             position: relative;
-            width: 95vw;
+            width: 98vw;
             max-width: 600px;
             aspect-ratio: 1 / 1;
             box-shadow: 0 0 40px rgba(0, 243, 255, 0.2);
@@ -42,7 +42,7 @@
             overflow: hidden;
             background-size: cover;
             background-position: center;
-            margin-top: 20px;
+            margin-top: 10px;
             background-color: #000;
         }
 
@@ -50,12 +50,12 @@
 
         /* The HUD outside */
         .hud {
-            width: 95vw;
+            width: 98vw;
             max-width: 600px;
             display: flex;
             justify-content: space-between;
             background: var(--panel-bg);
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 12px;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(0, 243, 255, 0.3);
@@ -63,7 +63,7 @@
             letter-spacing: 1px;
             text-transform: uppercase;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         /* The Mask Canvas */
@@ -120,13 +120,65 @@
         }
 
         h1 {
-            font-size: clamp(1.5rem, 6vw, 2.5rem);
-            margin-bottom: 15px;
+            font-size: clamp(1.2rem, 5vw, 2.5rem);
+            margin-bottom: 10px;
             background: linear-gradient(to right, var(--neon-green), var(--accent-color));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        /* Mobile Controls */
+        #mobile-controls {
+            display: none;
+            margin-top: 5px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .d-pad-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .control-btn {
+            width: 70px;
+            height: 70px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid var(--accent-color);
+            border-radius: 20px;
+            color: var(--accent-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            transition: all 0.1s;
+            touch-action: manipulation;
+        }
+
+        .control-btn:active {
+            background: var(--accent-color);
+            color: black;
+            transform: scale(0.9);
+            box-shadow: 0 0 20px var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            #mobile-controls {
+                display: flex;
+            }
+            .hud {
+                margin-top: 5px;
+            }
         }
 
         button {
@@ -186,6 +238,18 @@
                 <div style="margin: 15px 0;">Skor: <span id="final-score" style="color: var(--neon-green)">0</span></div>
                 <button onclick="startGame()">TEKRAR DENE</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Mobile Virtual Joystick -->
+    <div id="mobile-controls">
+        <div class="d-pad-row">
+            <div class="control-btn" onmousedown="handleDirection('ArrowUp')" ontouchstart="handleDirection('ArrowUp')">▲</div>
+        </div>
+        <div class="d-pad-row">
+            <div class="control-btn" onmousedown="handleDirection('ArrowLeft')" ontouchstart="handleDirection('ArrowLeft')">◀</div>
+            <div class="control-btn" onmousedown="handleDirection('ArrowDown')" ontouchstart="handleDirection('ArrowDown')">▼</div>
+            <div class="control-btn" onmousedown="handleDirection('ArrowRight')" ontouchstart="handleDirection('ArrowRight')">▶</div>
         </div>
     </div>
 
