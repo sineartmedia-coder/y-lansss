@@ -33,8 +33,9 @@
 
         #game-container {
             position: relative;
-            width: 600px;
-            height: 600px;
+            width: 95vw;
+            max-width: 600px;
+            aspect-ratio: 1 / 1;
             box-shadow: 0 0 40px rgba(0, 243, 255, 0.2);
             border: 2px solid var(--accent-color);
             border-radius: 8px;
@@ -49,11 +50,12 @@
 
         /* The HUD outside */
         .hud {
-            width: 600px;
+            width: 95vw;
+            max-width: 600px;
             display: flex;
             justify-content: space-between;
             background: var(--panel-bg);
-            padding: 15px 25px;
+            padding: 10px 20px;
             border-radius: 12px;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(0, 243, 255, 0.3);
@@ -61,6 +63,7 @@
             letter-spacing: 1px;
             text-transform: uppercase;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+            font-size: 0.9rem;
         }
 
         /* The Mask Canvas */
@@ -100,7 +103,8 @@
 
         .screen {
             background: var(--panel-bg);
-            padding: 30px 50px;
+            padding: 20px;
+            width: 85%;
             border-radius: 20px;
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -116,8 +120,8 @@
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            margin-bottom: 15px;
             background: linear-gradient(to right, var(--neon-green), var(--accent-color));
             -webkit-background-clip: text;
             background-clip: text;
@@ -171,9 +175,9 @@
         <div id="ui-layer">
             <div id="start-screen" class="screen active">
                 <h1>PENCERE YILANI</h1>
-                <p>Yılan büyüdükçe arkadaki dünyayı keşfet.</p>
+                <p style="font-size: 0.9rem;">Yılan büyüdükçe arkadaki dünyayı keşfet.</p>
                 <button onclick="startGame()">OYUNA BAŞLA</button>
-                <div class="controls-hint">Yön tuşları veya WASD ile kontrol et.</div>
+                <div class="controls-hint">Yön tuşları veya parmağınla kaydır.</div>
             </div>
 
             <div id="game-over-screen" class="screen">
@@ -209,15 +213,19 @@
         let revealRadius = gridSize / 2;
         let gameLoop;
 
+        // Touch handling
+        let touchStartX = 0;
+        let touchStartY = 0;
+
         // Initialize high score
         highScoreElement.textContent = highScore;
 
         function initCanvas() {
-            // Set canvas size matching the container
-            const container = document.getElementById('game-container');
-            canvas.width = container.clientWidth;
-            canvas.height = container.clientHeight;
-            tileCount = canvas.width / gridSize;
+            // Set canvas size matching its actual container width (square)
+            const width = gameContainer.clientWidth;
+            canvas.width = width;
+            canvas.height = width;
+            tileCount = Math.floor(width / gridSize);
             
             // Set provided background
             gameContainer.style.backgroundImage = "url('https://i.imgur.com/MTxtmI9.jpeg')";
@@ -392,7 +400,35 @@
         }
 
         window.addEventListener('keydown', e => {
-            switch(e.key) {
+            handleDirection(e.key);
+        });
+
+        // Touch Events
+        gameContainer.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        gameContainer.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (Math.abs(diffX) > 30) {
+                    handleDirection(diffX > 0 ? 'ArrowRight' : 'ArrowLeft');
+                }
+            } else {
+                if (Math.abs(diffY) > 30) {
+                    handleDirection(diffY > 0 ? 'ArrowDown' : 'ArrowUp');
+                }
+            }
+        }, { passive: true });
+
+        function handleDirection(key) {
+            switch(key) {
                 case 'ArrowUp':
                 case 'w':
                 case 'W':
@@ -414,7 +450,7 @@
                     if (dx !== -1) { nextDx = 1; nextDy = 0; }
                     break;
             }
-        });
+        }
     </script>
 </body>
 </html>
