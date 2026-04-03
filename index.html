@@ -351,11 +351,17 @@
             foods.push(newFood);
         }
 
-        function initFoods() {
-            foods = [];
-            for (let i = 0; i < 5; i++) {
+        function ensureFoodCount() {
+            if (!tileCount) return;
+            const targetCount = 5 + Math.floor(score / 250) * 3;
+            while (foods.length < targetCount) {
                 spawnFood();
             }
+        }
+
+        function initFoods() {
+            foods = [];
+            ensureFoodCount();
         }
 
         window.onload = initCanvas;
@@ -422,7 +428,7 @@
                         localStorage.setItem('snakeHighScore', highScore);
                     }
                     foods.splice(index, 1);
-                    spawnFood();
+                    ensureFoodCount();
                     ate = true;
                 }
             });
